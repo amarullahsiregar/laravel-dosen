@@ -1,0 +1,40 @@
+:root {
+    --radio-mobile: 4.46vw;
+}
+@media (pointer: coarse) {
+    /* Untuk Mobile dengan touchscreen */
+    .view-title {
+        max-width: 90vw;
+    }
+    div > button.btn.bg-grd-steelblue {
+        width: 74vw !important;
+        margin-left: 3vh !important;
+    }
+
+    .dosen-container {
+        max-height: 94vh;
+    }
+    .viewing-area {
+        height: 75vw;
+        max-width: 90vw;
+        color: aliceblue;
+        margin-left: 0 !important;
+    }
+    .tanggal-dashboard-dosen {
+        font-size: 5vw;
+        text-align: left;
+    }
+    .dosen-container label {
+        margin-left: 10vw;
+        font-size: 3vw;
+    }
+    .dosen-container input {
+        height: var(--radio-mobile) !important;
+        width: var(--radio-mobile) !important;
+    }
+
+    div.row > label {
+        margin-left: 8vw !important;
+        font-size: 3.64vh;
+    }
+}

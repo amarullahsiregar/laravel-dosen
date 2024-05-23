@@ -1,4 +1,3 @@
-
 <style>
     body {
         margin: 0;
@@ -63,19 +62,19 @@
 <!-- Component Navbar -->
 <div class="navbar" id="myNavbar">
     @if (isset($nav1))
-    <a class="text-white active" href="{{$nav1ref}}">{{ $nav1 }}</a>
+    <a class="{{ $nav1class ?? '' }}" href="{{$nav1ref}}">{{ $nav1 }}</a>
     @endif
     @if (isset($nav2))
-    <a class="text-white" href="{{ $nav2ref }}">{{ $nav2 }}</a>
+    <a class="{{ $nav2class ?? '' }}" href="{{ $nav2ref }}">{{ $nav2 }}</a>
     @endif
     @if (isset($nav3))
-    <a class="text-white" href="{{ $nav3ref }}">{{ $nav3 }}</a>
+    <a class="{{ $nav3class ?? '' }}" href="{{ $nav3ref }}">{{ $nav3 }}</a>
     @endif
     @if (isset($nav4))
-    <a class="text-white" href="{{ $nav4ref }}"> {{ $nav4 }} </a>
+    <a class="{{ $nav4class ?? '' }}" href="{{ $nav4ref }}"> {{ $nav4 }} </a>
     @endif
     @if (isset($nav5))
-    <a class="text-white" href="{{ $nav5ref }}"> {{ $nav5 }} </a>
+    <a class="{{ $nav5class ?? '' }}" href="{{ $nav5ref }}"> {{ $nav5 }} </a>
     @endif
     <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 </div>

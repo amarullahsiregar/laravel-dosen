@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AntrianBimbingan;
 use App\Models\Dosen;
+use App\Models\Jambimbingan;
 use App\Models\Mahasiswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DosenController extends Controller
@@ -18,21 +20,34 @@ class DosenController extends Controller
         } else {
         }
     }
-    public function setStatus(Request $request, $email)
+    public function setSlot(Request $request, $key)
     {
 
-        $id = Dosen::where('email', '=', $email)->first()->id;
-        $kesediaan = $request->kesediaan_bimbingan;
-        if ($request->status_kehadiran == 'Mengajar' || $request->status_kehadiran == 'Tidak Hadir') {
-            $kesediaan = 'Tidak';
+        $dosen = Dosen::find($key);
+        if ($dosen->update(['slot_bimbingan' => $request->slot_bimbingan,])) {
+            return redirect('/antrian-mahasiswa' . '/' . $dosen->email);
         }
-        dump($request->status_kehadiran);
-        $dosen = Dosen::find(Dosen::where('email', '=', $email)->first()->id);
-        $dosen->update([
-            'status_kehadiran' => $request->status_kehadiran,
+    }
+    public function setJam(Request $request, $key)
+    {
 
-        ]);
-        return redirect('/dashboard-dosen' . '/' . $email);
+        $dosen = Dosen::find($key);
+        $jambimbingan = Jambimbingan::where('id_dosen', '=', $dosen->id)->first();
+        if ($jambimbingan != null) {
+            $jambimbingan->update([
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
+            return redirect('/antrian-mahasiswa' . '/' . $dosen->email);
+        } else {
+            Jambimbingan::create([
+                'id_dosen' => $dosen->id,
+                'tanggal' => Carbon::now()->toDateString(),
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
+            return redirect('/antrian-mahasiswa' . '/' . $dosen->email);
+        }
     }
     public function setHadir($key)
     {
@@ -86,9 +101,10 @@ class DosenController extends Controller
     public function listAntrian($email)
     {
         $details = Dosen::where('email', '=', $email)->first();
+        $jambimbingan = Jambimbingan::where('id_dosen', '=', $details->id)->first();
         $antrians = AntrianBimbingan::all()->where('email', '=', $email);
         if ($details != null) {
-            return  view('dosen.bimbingan', compact('details', 'antrians'));
+            return  view('dosen.bimbingan', compact('details', 'jambimbingan', 'antrians'));
         }
     }
     public function detail($email)

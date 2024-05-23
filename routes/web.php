@@ -44,5 +44,6 @@ Route::get('/set-mengajar/{key}', [DosenController::class, 'setMengajar']);
 Route::get('/set-absen/{key}', [DosenController::class, 'setAbsen']);
 Route::get('/set-bersedia/{key}', [DosenController::class, 'setBersedia']);
 Route::get('/set-tidak-bersedia/{key}', [DosenController::class, 'setTidakBersedia']);
-Route::post('/kehadiran-set-put/{username}', [DosenController::class, 'setStatus']);  //Bisa diakses oleh dosen
+Route::post('/set-slot/{key}', [DosenController::class, 'setSlot']);  //Bisa diakses oleh dosen
+Route::post('/set-jam-bimbingan/{key}', [DosenController::class, 'setJam']);  //Bisa diakses oleh dosen
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

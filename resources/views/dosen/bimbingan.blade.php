@@ -3,9 +3,10 @@
 @section('content')
 
 @php
-    $nav1 = "Status Hadir Dosen";
+    $nav1 = "Dashboard Dosen";
     $nav1ref =  url('dashboard-dosen').'/'.$details->email ;
     $nav2 = "Antrian Bimbingan";
+    $nav2class = "active";
     $nav2ref =  url('antrian-mahasiswa').'/'.$details->email ;
     $nav3 = "Detail Dosen";
     $nav3ref =  url('detail-dosen').'/' .$details->email;
@@ -26,13 +27,13 @@
                 <div class="viewing-area bg-white shadow rounded-lg p-6">
 
                     <span class="text-gray-700 font-bold tracking-wider mb-2">
-                        <h1 class="text-2xl font-bold leading-6 text-gray-900 pb-5">
-                            Antrian Bimbingan
+                        <h1 class="text-3xl font-bold leading-6 text-gray-900 pb-5">
+                            {{ $details->nama }}
                         </h1>
+                        <p class="text-xl font-bold leading-6 text-gray-900 pb-5">({{ $details->inisial_dosen }})</p>
+                        <p class="text-xl font-bold leading-6 text-gray-900 pb-5">No. Induk {{ $details->id }}</p>
                     </span>
                     <div class="flex flex-col items-center">
-                        <h1 class="text-xl font-bold text-center">{{ $details->nama }}</h1>
-                        <p class="text-gray-700">No. Induk {{ $details->id }}</p>
 
                         <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 w-full max-w-6xl">
 
@@ -116,7 +117,7 @@
                                     <span class="text-xl font-bold">Bersedia Bimbingan</span>
                                     <div class="flex items-center justify-between">
                                         <span class="text-gray-500">Kesediaan Membimbing</span>
-                                        <span class="text-red-500 text-sm font-semibold ml-2">{{ $details->slot_bimbingan }}</span>
+                                        <span class="text-green-500 text-sm font-semibold ml-2">Slot : {{ $details->slot_bimbingan }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -152,32 +153,73 @@
                     <div class="flex flex-col">
                         <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Ubah Status Kesediaan Bimbingan</span>
                     </div>
+                        {{--  --}}
+                        <div class="grid lg:grid-cols-3 md:grid-cols-2 w-full max-w-6xl">
+                            <div>
+                                <h1 class="text-3xl font-bold leading-6 text-gray-900 mb-5">
+                                    Terima Bimbingan
+                                </h1>
+                            </div>
+                            @if ($details->kesediaan_bimbingan=='Tidak')
+                            <div>
+                                <a href="{{ url('set-bersedia').'/'.$details->email }}" aria-label="theme toggler" class="mb-5 flex h-[48px] w-[48px] items-center justify-center rounded-lg border border-stroke bg-white text-dark-4 duration-300 hover:bg-stroke dark:border-dark-2 dark:bg-dark-2 dark:text-white dark:hover:bg-dark-3 sm:flex">
+                                    <span class="text-red-500">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                            @elseif ($details->kesediaan_bimbingan=='Bersedia')
+                            <div class="max-w-20">
+                                <a href="{{ url('set-tidak-bersedia').'/'.$details->email }}" aria-label="theme toggler" class="mb-5 flex h-[48px] w-[48px] items-center justify-center rounded-lg border border-stroke bg-white text-dark-4 duration-300 hover:bg-stroke dark:border-dark-2 dark:bg-dark-2 dark:text-white dark:hover:bg-dark-3 sm:flex">
+                                    <span class="text-green-500">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                            <div>
+                                <form action="/set-slot/{{ $details->email }}" method="post">
+                                    @csrf
+                                    <label for="slot_bimbingan">Slot Bimbingan</label>
+                                    <input class="py-3 px-5 max-w-24 bg-gray-200" type="number" min="0" value="{{ $details->slot_bimbingan }}" class="border mb-5 flex" id="slot_bimbingan" name="slot_bimbingan">
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-3" rounded>Set</button>
+                                </form>
+                            </div>
+                            <form action="/set-jam-bimbingan/{{ $details->email }}" method="POST">
+                                @csrf
+                                <!--    Jam Mulai   -->
+                                <div>
+                                    <h1 class="text-xl  leading-6 text-gray-900 mb-5">Jam Mulai</h1>
+                                    <input type="time" name="jam_mulai" id="jam_mulai" value="{{ $jambimbingan->jam_mulai ?? ''  }}">
+                                </div>
+                                <!--    Jam Mulai   -->
 
-                    {{--  --}}
-                    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 w-full max-w-6xl">
-                        <h1 class="text-3xl font-bold leading-6 text-gray-900 m-auto">
-                            Terima Bimbingan
-                        </h1>
-                        @if ($details->kesediaan_bimbingan=='Bersedia')
-                            <a href="{{ url('set-tidak-bersedia').'/'.$details->email }}" aria-label="theme toggler" class="flex h-[48px] w-[48px] items-center justify-center rounded-lg border border-stroke bg-white text-dark-4 duration-300 hover:bg-stroke dark:border-dark-2 dark:bg-dark-2 dark:text-white dark:hover:bg-dark-3 sm:flex">
-                                <span class="text-green-500">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                      </svg>
-                        @elseif ($details->kesediaan_bimbingan=='Tidak')
-                            <a href="{{ url('set-bersedia').'/'.$details->email }}" aria-label="theme toggler" class="flex h-[48px] w-[48px] items-center justify-center rounded-lg border border-stroke bg-white text-dark-4 duration-300 hover:bg-stroke dark:border-dark-2 dark:bg-dark-2 dark:text-white dark:hover:bg-dark-3 sm:flex">
-                                <span class="text-red-500">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                      </svg>
-                        @endif
+                                <!--    Jam Selesai   -->
+                                <div>
+                                    <h1 class="text-xl  leading-6 text-gray-900 mb-5">Jam Selesai</h1>
+                                    <input type="time" name="jam_selesai" id="jam_selesai" value="{{ $jambimbingan->jam_selesai ?? ''  }}">
+                                </div>
+                                <!--    Selesai   -->
 
-                                </span>
-                            </a>
-                    </div>
+                                <!--    Tombol Set   -->
+                                <div>
+                                    <h1 class="text-xl font-bold leading-6 text-gray-900 mb-5">
+                                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                                            Set Jam
+                                        </button>
+                                    </h1>
+                                </div>
+                                <!--    Tombol Set   -->
+                            </form>
+                            @endif
 
-                    {{--  --}}
+                        </div>
+
+                        {{--  --}}
 
                     <hr class="my-6 border-t border-gray-300">
 

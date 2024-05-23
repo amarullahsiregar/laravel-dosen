@@ -1,21 +1,24 @@
-<!-- lokasi file pada /views/dosen/index.blade.php -->
-@extends('layouts.dosen') <!-- Menggunakan Layout bernama "app.blade.php" pada direktori /views/layouts/ -->
+@extends('layouts.dosen')
 @section('title','Detail')
 @section('content')
 
 @php
-    $nav1 = "Detail Dosen";
-    $nav1ref = url('detail-dosen').'/' .$details->email;
-    $nav2 = "Status Hadir Dosen";
-    $nav2ref = url('dashboard-dosen').'/'.$details->email ;
-    $nav3 = "Antrian Bimbingan";
-    $nav3ref = url('antrian-mahasiswa').'/'.$details->email ;
+    $nav1 = "Dashboard Dosen";
+    $nav1ref = url('dashboard-dosen').'/'.$details->email ;
+    $nav2 = "Antrian Bimbingan";
+    $nav2ref = url('antrian-mahasiswa').'/'.$details->email ;
+    $nav3 = "Detail Dosen";
+    $nav3ref = url('detail-dosen').'/' .$details->email;
+    $nav3class = "active";
     $nav4 = "Logout";
     $nav4ref =  url('logout');
     $class = "text-orange-500";
 @endphp
 
+<h2 class="tanggal-dashboard-dosen px-10 text-gray-400"> {{ \Carbon\Carbon::now()->isoFormat('dddd') }}  {{" ".date("d F Y");}}</h2>
+
 @include('partials.navbar')
+
 <div class="dosen-container py-4">
     <div class="card dosen-dashboard">
         <div class="card-body pt-4 p-3">
@@ -24,18 +27,14 @@
                 <div class="viewing-area bg-white shadow rounded-lg p-6">
 
                     <span class="text-gray-700 font-bold tracking-wider mb-2">
-                        <h1 class="text-2xl font-bold leading-6 text-gray-900 pb-5">
-                            Detail Dosen
+                        <h1 class="text-3xl font-bold leading-6 text-gray-900 pb-5">
+                            {{ $details->nama }}
                         </h1>
+                        <p class="text-xl font-bold leading-6 text-gray-900 pb-5">({{ $details->inisial_dosen }})</p>
+                        <p class="text-xl font-bold leading-6 text-gray-900 pb-5">No. Induk {{ $details->id }}</p>
                     </span>
-
-                    {{-- viewing --}}
-
-
                     <div class="flex flex-col items-center">
-                        <h1 class="text-xl font-bold text-center">{{ $details->nama }}</h1>
-                        <p class="text-gray-700">{{ $details->inisial_dosen }}</p>
-                        <p class="text-gray-700">No. Induk {{ $details->id }}</p>
+
                         <p class="text-gray-700">{{ $details->email }}</p>
 
                         <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 w-full max-w-6xl">
